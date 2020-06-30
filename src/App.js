@@ -70,48 +70,6 @@ import './App.css';
 
 ////////// Redux Hook Example Peer Component
 
-function Message() {
-  const message = useSelector(state => state.counter.message);
-  // the text will render to a random color for
-  // each instance of the Message component
-  const getColor = () => (Math.floor(Math.random() * 255))
-  const style = {
-    color: `rgb(${getColor()},${getColor()},${getColor()})`
-  }
-  return (
-    <div>
-      <h4 style={style}>{message}</h4>
-    </div>
-  )
-}
-
-function Count() {
-  const dispatch = useDispatch();
-  const count = useSelector(state => state.counter.counter);
-  return (
-    <div>
-      <h3>Current count from context: {count}</h3>
-      <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
-    </div>
-  )
-}
-
-function App() {
-  return (
-    <div>
-      <h2>Re-renders! 😩</h2>
-      <Message />
-      <Message />
-      <Message />
-      <Count />
-    </div>
-  )
-}
-
-
-
-////////// Redux Hook Example Child Component Re-render 
-
 // function Message() {
 //   const message = useSelector(state => state.counter.message);
 //   // the text will render to a random color for
@@ -134,7 +92,6 @@ function App() {
 //     <div>
 //       <h3>Current count from context: {count}</h3>
 //       <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
-//       <Message />
 //     </div>
 //   )
 // }
@@ -145,9 +102,55 @@ function App() {
 //       <h2>Re-renders! 😩</h2>
 //       <Message />
 //       <Message />
+//       <Message />
 //       <Count />
 //     </div>
 //   )
 // }
+
+
+
+////////// Redux Hook Example Child Component Re-render 
+
+function Message() {
+  const message = useSelector(state => state.counter.message);
+  // the text will render to a random color for
+  // each instance of the Message component
+  const getColor = () => (Math.floor(Math.random() * 255))
+  const style = {
+    color: `rgb(${getColor()},${getColor()},${getColor()})`
+  }
+  return (
+    <div>
+      <h4 style={style}>{message}</h4>
+    </div>
+  )
+}
+
+// changed to use React.memo
+const MemoizedMessage = React.memo(Message)
+
+function Count() {
+  const dispatch = useDispatch();
+  const count = useSelector(state => state.counter.counter);
+  return (
+    <div>
+      <h3>Current count from context: {count}</h3>
+      <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
+      <MemoizedMessage />
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <div>
+      <h2>Re-renders! 😩</h2>
+      <Message />
+      <Message />
+      <Count />
+    </div>
+  )
+}
 
 export default App;
